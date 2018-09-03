@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import './App.css';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
+import {Nav, Navbar, NavItem} from "react-bootstrap";
 import Home from "./components/Home";
 import Login from "./components/users/Login";
 import UserCreate from "./components/users/UserCreate";
-import {Nav, Navbar, NavItem} from "react-bootstrap";
+import AuthButton from "./components/users/AuthButton";
+import PrivateRoute from "./components/PrivateRoute";
+
 
 class App extends Component {
     render() {
@@ -35,13 +38,14 @@ class App extends Component {
                                     Upload Photos
                                 </NavItem>
                             </Nav>
+                            <AuthButton/>
 
                         </Navbar>
                         <Route exact path="/" component={Home}/>
                         <Route path="/user/login" component={Login}/>
                         <Route path="/user/create" component={UserCreate}/>
-                        <Route path="/photo/list" component={UserCreate}/>
-                        <Route path="/photo/upload" component={UserCreate}/>
+                        <PrivateRoute path="/photo/list" component={UserCreate}/>
+                        <PrivateRoute path="/photo/upload" component={UserCreate}/>
                     </div>
 
                 </Router>
