@@ -7,6 +7,10 @@ import Login from "./components/users/Login";
 import UserCreate from "./components/users/UserCreate";
 import AuthButton from "./components/users/AuthButton";
 import PrivateRoute from "./components/PrivateRoute";
+import ResetPassword from "./components/users/ResetPassword";
+import ChangePassword from "./components/users/ChangePassword";
+import Create from "./components/photos/Create";
+import List from "./components/photos/List";
 
 
 class App extends Component {
@@ -25,12 +29,6 @@ class App extends Component {
                                 <NavItem componentClass={Link} href="/" to="/">
                                     Home
                                 </NavItem>
-                                <NavItem componentClass={Link} href="/user/login" to="/user/login">
-                                    Login
-                                </NavItem>
-                                <NavItem componentClass={Link} href="/user/create" to="/user/create">
-                                    Register
-                                </NavItem>
                                 <NavItem componentClass={Link} href="/photo/list" to="/photo/list">
                                     List Photos
                                 </NavItem>
@@ -44,8 +42,10 @@ class App extends Component {
                         <Route exact path="/" component={Home}/>
                         <Route path="/user/login" component={Login}/>
                         <Route path="/user/create" component={UserCreate}/>
-                        <PrivateRoute path="/photo/list" component={UserCreate}/>
-                        <PrivateRoute path="/photo/upload" component={UserCreate}/>
+                        <Route path="/user/reset-password" component={ResetPassword}/>
+                        <Route path="/user/change-password/:token" component={ChangePassword}/>
+                        <PrivateRoute path="/photo/list" component={List}/>
+                        <PrivateRoute path="/photo/upload" component={Create}/>
                     </div>
 
                 </Router>

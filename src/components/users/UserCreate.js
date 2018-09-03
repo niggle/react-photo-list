@@ -42,7 +42,7 @@ class Login extends Component {
     render() {
         return (
             <Grid>
-                <Col xs={6} xsOffset={3}>
+                <Col xs={12} md={6} mdOffset={3}>
                     <h1>Register</h1>
                     <form>
                         <FormGroup

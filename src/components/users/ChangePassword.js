@@ -1,31 +1,25 @@
 import React from 'react';
 
-import {Link, Redirect} from "react-router-dom";
-import {fakeAuth} from "../../api/helpers";
 import {Button, Col, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
 import ControlLabel from "react-bootstrap/es/ControlLabel";
 
-class Login extends React.Component {
+class ResetPassword extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             redirectToReferrer: false,
-            username: '',
-            password: ''
+            password: '',
+            password2: ''
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.login = this.login.bind(this)
+        this.resetPassword = this.resetPassword.bind(this)
     }
 
-    login(e) {
+    resetPassword(e) {
         e.preventDefault();
-        fakeAuth.authenticate(() => {
-            this.setState(() => ({
-                redirectToReferrer: true
-            }))
-        })
+        // api call
     };
     getValidationState() {
         const length = this.state.value.length;
@@ -46,47 +40,37 @@ class Login extends React.Component {
     }
 
     render() {
-        const {from} = this.props.location.state || {from: {pathname: '/'}};
-        const {redirectToReferrer} = this.state;
-        if (redirectToReferrer === true) {
-            return <Redirect to={from}/>
-        }
         return (
             <div>
                 <Grid>
                     <Row>
                         <Col xs={12} md={6} mdOffset={3}>
-                            <h1>Login</h1>
-                            <form onSubmit={this.login}>
+                            <h1>Reset password</h1>
+                            <form onSubmit={this.resetPassword}>
                                 <FormGroup controlId="formUsername">
-                                    <ControlLabel>Username</ControlLabel>
+                                    <ControlLabel>New password</ControlLabel>
                                     <FormControl
                                         type="text"
-                                        name="username"
-                                        value={this.state.username}
-                                        onChange={this.handleInputChange}
-                                    />
-                                    <FormControl.Feedback/>
-                                </FormGroup>
-                                <FormGroup controlId="formPassword">
-                                    <ControlLabel>Password</ControlLabel>
-                                    <FormControl
-                                        type="password"
                                         name="password"
                                         value={this.state.password}
                                         onChange={this.handleInputChange}
                                     />
                                     <FormControl.Feedback/>
                                 </FormGroup>
-                                <Button type="submit" className="btn btn-primary">Log in</Button>
+                                <FormGroup controlId="formUsername">
+                                    <ControlLabel>Repeat new password</ControlLabel>
+                                    <FormControl
+                                        type="text"
+                                        name="password2"
+                                        value={this.state.password2}
+                                        onChange={this.handleInputChange}
+                                    />
+                                    <FormControl.Feedback/>
+                                </FormGroup>
+
+                                <Button type="submit" className="btn btn-primary">Reset password</Button>
 
                             </form>
-                        </Col>
-                        <Col xs={12} md={6} mdOffset={3} className="text-right">
-                            <Link to='/user/reset-password' >Forgot your password?</Link>
-                        </Col>
-                        <Col xs={12} md={6} mdOffset={3} className="text-right">
-                            <Link to='/user/create' > Create an account </Link>
                         </Col>
                     </Row>
                 </Grid>
@@ -95,4 +79,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default ResetPassword;
