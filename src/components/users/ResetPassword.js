@@ -1,7 +1,10 @@
 import React from 'react';
 
-import {Button, Col, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
+import {Alert, Button, Col, FormControl, FormGroup, Grid, HelpBlock, Row} from "react-bootstrap";
 import ControlLabel from "react-bootstrap/es/ControlLabel";
+import Panel from "react-bootstrap/es/Panel";
+import {apiURL} from "../../api/helpers";
+
 
 class ResetPassword extends React.Component {
 
@@ -9,8 +12,8 @@ class ResetPassword extends React.Component {
         super(props);
         this.state = {
             redirectToReferrer: false,
-            username: '',
-            password: ''
+            email: '',
+            status: ''
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -20,7 +23,24 @@ class ResetPassword extends React.Component {
     resetPassword(e) {
         e.preventDefault();
         // api call
+        fetch(apiURL + 'user/password/reset/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: this.state.email,
+            })
+
+        }).then(function (response) {
+            return response.json()
+
+        }).then(function (data) {
+            console.log(data)
+        });
     };
+
     getValidationState() {
         const length = this.state.value.length;
         if (length > 10) return 'success';
@@ -41,30 +61,41 @@ class ResetPassword extends React.Component {
 
     render() {
         return (
-            <div>
-                <Grid>
-                    <Row>
+            <Grid>
+                <Row>
+                    <Col xs={12} md={6} mdOffset={3}>
+                        <Panel>
+                            <Panel.Body>
+                                <h1>Reset password</h1>
+                                <form onSubmit={this.resetPassword}>
+                                    <FormGroup controlId="formUsername">
+                                        <ControlLabel>Email</ControlLabel>
+                                        <FormControl
+                                            type="text"
+                                            name="email"
+                                            value={this.state.email}
+                                            onChange={this.handleInputChange}
+                                        />
+                                        <FormControl.Feedback/>
+                                    </FormGroup>
+
+                                    <Button type="submit" className="btn btn-primary">Reset password</Button>
+
+
+                                </form>
+                            </Panel.Body>
+                        </Panel>
+                    </Col>
+                    {this.state.status === 'success' ?
                         <Col xs={12} md={6} mdOffset={3}>
-                            <h1>Reset password</h1>
-                            <form onSubmit={this.resetPassword}>
-                                <FormGroup controlId="formUsername">
-                                    <ControlLabel>Username</ControlLabel>
-                                    <FormControl
-                                        type="text"
-                                        name="username"
-                                        value={this.state.username}
-                                        onChange={this.handleInputChange}
-                                    />
-                                    <FormControl.Feedback/>
-                                </FormGroup>
+                            <Alert bsStyle="success">
+                                You can now check your email to continue make the password reset.
+                            </Alert>;
+                        </Col> :
+                        null}
 
-                                <Button type="submit" className="btn btn-primary">Reset password</Button>
-
-                            </form>
-                        </Col>
-                    </Row>
-                </Grid>
-            </div>
+                </Row>
+            </Grid>
         )
     }
 }

@@ -1,8 +1,42 @@
 import React from 'react';
 
 import {Col, Grid, Image, Row} from "react-bootstrap";
+import {apiURL} from "../../api/helpers";
 
 class List extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            imageList: []
+        };
+
+    }
+
+    componentDidMount() {
+        fetch(apiURL + 'photos/'
+        ).then(function (response) {
+            return response.json()
+
+        }).then((data) => {
+            if(data){
+               this.setState({imageList: data})
+            }
+
+        });
+    }
+
+    renderImages() {
+        return this.state.imageList.map((obj, index) => {
+                return (
+                    <Col xs={3} key={index}>
+                        <Image
+                            src={obj.photo}
+                            thumbnail/>
+                    </Col>
+                )
+            }
+        );
+    }
 
     render() {
         return (
@@ -12,24 +46,7 @@ class List extends React.Component {
                         <Col xs={12}>
                             <h1>Image List</h1>
                             <Row>
-                                <Col xs={3}>
-                                    <Image src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ed86b965826826e3dd08bb3b33726543&auto=format&fit=crop&w=1414&q=80" thumbnail />
-                                </Col>
-                                <Col xs={3}>
-                                    <Image src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ed86b965826826e3dd08bb3b33726543&auto=format&fit=crop&w=1414&q=80" thumbnail />
-                                </Col>
-                                <Col xs={3}>
-                                    <Image src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ed86b965826826e3dd08bb3b33726543&auto=format&fit=crop&w=1414&q=80" thumbnail />
-                                </Col>
-                                <Col xs={3}>
-                                    <Image src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ed86b965826826e3dd08bb3b33726543&auto=format&fit=crop&w=1414&q=80" thumbnail />
-                                </Col>
-                                <Col xs={3}>
-                                    <Image src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ed86b965826826e3dd08bb3b33726543&auto=format&fit=crop&w=1414&q=80" thumbnail />
-                                </Col>
-                                <Col xs={3}>
-                                    <Image src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ed86b965826826e3dd08bb3b33726543&auto=format&fit=crop&w=1414&q=80" thumbnail />
-                                </Col>
+                                {this.renderImages()}
                             </Row>
                         </Col>
                     </Row>

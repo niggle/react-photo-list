@@ -1,9 +1,8 @@
 import React from 'react';
 
 import {Link, Redirect} from "react-router-dom";
-import {fakeAuth} from "../../api/helpers";
-import {Button, Col, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
-import ControlLabel from "react-bootstrap/es/ControlLabel";
+import {auth} from "../../api/helpers";
+import {Button, Col, FormControl, FormGroup, Grid, HelpBlock, Row, ControlLabel, Panel} from "react-bootstrap";
 
 class Login extends React.Component {
 
@@ -12,7 +11,10 @@ class Login extends React.Component {
         this.state = {
             redirectToReferrer: false,
             username: '',
-            password: ''
+            usernameErrorMessage: '',
+            password: '',
+            passwordErrorMessage: '',
+            nonFieldError: '',
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -21,19 +23,25 @@ class Login extends React.Component {
 
     login(e) {
         e.preventDefault();
-        fakeAuth.authenticate(() => {
-            this.setState(() => ({
-                redirectToReferrer: true
-            }))
-        })
+        let authData = {
+            username: this.state.username,
+            password: this.state.password
+        };
+        auth.authenticate(authData, (errors) => {
+                if (!errors) {
+                    this.setState(() => ({
+                        redirectToReferrer: true
+                    }))
+                } else {
+                    this.setState({
+                        nonFieldError: errors.non_field_errors,
+                        usernameErrorMessage: errors.username,
+                        passwordErrorMessage: errors.password
+                    })
+                }
+            }
+        )
     };
-    getValidationState() {
-        const length = this.state.value.length;
-        if (length > 10) return 'success';
-        else if (length > 5) return 'warning';
-        else if (length > 0) return 'error';
-        return null;
-    }
 
     handleInputChange(event) {
         const target = event.target;
@@ -56,37 +64,48 @@ class Login extends React.Component {
                 <Grid>
                     <Row>
                         <Col xs={12} md={6} mdOffset={3}>
-                            <h1>Login</h1>
-                            <form onSubmit={this.login}>
-                                <FormGroup controlId="formUsername">
-                                    <ControlLabel>Username</ControlLabel>
-                                    <FormControl
-                                        type="text"
-                                        name="username"
-                                        value={this.state.username}
-                                        onChange={this.handleInputChange}
-                                    />
-                                    <FormControl.Feedback/>
-                                </FormGroup>
-                                <FormGroup controlId="formPassword">
-                                    <ControlLabel>Password</ControlLabel>
-                                    <FormControl
-                                        type="password"
-                                        name="password"
-                                        value={this.state.password}
-                                        onChange={this.handleInputChange}
-                                    />
-                                    <FormControl.Feedback/>
-                                </FormGroup>
-                                <Button type="submit" className="btn btn-primary">Log in</Button>
+                            <Panel>
+                                <Panel.Body>
+                                    <h1>Login</h1>
+                                    <form onSubmit={this.login}>
+                                        <FormGroup controlId="formUsername">
+                                            <ControlLabel>Username</ControlLabel>
+                                            <FormControl
+                                                type="text"
+                                                name="username"
+                                                value={this.state.username}
+                                                onChange={this.handleInputChange}
+                                            />
+                                            <FormControl.Feedback/>
+                                            <HelpBlock>
+                                                <p className="text-danger">{this.state.usernameErrorMessage}</p>
+                                            </HelpBlock>
+                                        </FormGroup>
+                                        <FormGroup controlId="formPassword">
+                                            <ControlLabel>Password</ControlLabel>
+                                            <FormControl
+                                                type="password"
+                                                name="password"
+                                                value={this.state.password}
+                                                onChange={this.handleInputChange}
+                                            />
+                                            <FormControl.Feedback/>
+                                            <HelpBlock>
+                                                <p className="text-danger">{this.state.passwordErrorMessage}</p>
+                                                <p className="text-danger">{this.state.nonFieldError}</p>
+                                            </HelpBlock>
 
-                            </form>
+                                        </FormGroup>
+                                        <Button type="submit" className="btn btn-primary">Log in</Button>
+                                    </form>
+                                </Panel.Body>
+                            </Panel>
                         </Col>
                         <Col xs={12} md={6} mdOffset={3} className="text-right">
-                            <Link to='/user/reset-password' >Forgot your password?</Link>
+                            <Link to='/user/reset-password'>Forgot your password?</Link>
                         </Col>
                         <Col xs={12} md={6} mdOffset={3} className="text-right">
-                            <Link to='/user/create' > Create an account </Link>
+                            <Link to='/user/create'> Create an account </Link>
                         </Col>
                     </Row>
                 </Grid>
