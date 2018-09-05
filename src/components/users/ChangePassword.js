@@ -1,7 +1,6 @@
 import React from 'react';
 
-import {Button, Col, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
-import ControlLabel from "react-bootstrap/es/ControlLabel";
+import {Button, Col, FormControl, FormGroup, Grid, Row, ControlLabel} from "react-bootstrap";
 
 class ResetPassword extends React.Component {
 

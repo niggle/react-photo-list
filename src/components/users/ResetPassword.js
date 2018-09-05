@@ -1,8 +1,6 @@
 import React from 'react';
 
-import {Alert, Button, Col, FormControl, FormGroup, Grid, HelpBlock, Row} from "react-bootstrap";
-import ControlLabel from "react-bootstrap/es/ControlLabel";
-import Panel from "react-bootstrap/es/Panel";
+import {Alert, Button, Col, FormControl, FormGroup, Grid, ControlLabel, Row, Panel} from "react-bootstrap";
 import {apiURL} from "../../api/helpers";
 
 

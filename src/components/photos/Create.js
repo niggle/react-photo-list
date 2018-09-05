@@ -1,7 +1,6 @@
 import React from 'react';
 
-import {Button, Col, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
-import ControlLabel from "react-bootstrap/es/ControlLabel";
+import {Button, Col, FormControl, FormGroup, Grid, Row, ControlLabel} from "react-bootstrap";
 import {apiURL} from "../../api/helpers";
 
 class Create extends React.Component {
@@ -11,7 +10,6 @@ class Create extends React.Component {
         this.state = {
             image: '',
         };
-
         this.handleInputChange = this.handleInputChange.bind(this);
         this.uploadImage = this.uploadImage.bind(this)
     }
@@ -32,14 +30,6 @@ class Create extends React.Component {
             console.log(data)
         });
     };
-
-    getValidationState() {
-        const length = this.state.value.length;
-        if (length > 10) return 'success';
-        else if (length > 5) return 'warning';
-        else if (length > 0) return 'error';
-        return null;
-    }
 
     handleInputChange(event) {
         this.setState({

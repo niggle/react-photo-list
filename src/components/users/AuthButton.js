@@ -1,7 +1,7 @@
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import React from "react";
 import {auth} from "../../api/helpers";
-import Link from "react-router-dom/es/Link";
+
 
 const AuthButton = withRouter(({history}) => (
     auth.isAuthenticated() ? (

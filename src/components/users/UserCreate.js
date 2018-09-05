@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Col, ControlLabel, FormControl, FormGroup, Grid} from "react-bootstrap";
-import Panel from "react-bootstrap/es/Panel";
+import {Button, Col, ControlLabel, FormControl, FormGroup, Grid, Panel} from "react-bootstrap";
 import {apiURL} from "../../api/helpers";
 
 class Login extends Component {
