@@ -13,13 +13,20 @@ class List extends React.Component {
     }
 
     componentDidMount() {
-        fetch(apiURL + 'photos/'
-        ).then(function (response) {
+        console.log('Token ' + localStorage.getItem('token'))
+        fetch(apiURL + 'photos/', {
+            method: 'GET',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + localStorage.getItem('token')
+            })
+
+        }).then(function (response) {
             return response.json()
 
         }).then((data) => {
-            if(data){
-               this.setState({imageList: data})
+            if (data) {
+                this.setState({imageList: data})
             }
 
         });
