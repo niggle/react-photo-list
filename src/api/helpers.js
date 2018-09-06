@@ -1,4 +1,4 @@
-const apiURL = 'https://api-photo-list.herokuapp.com'/;
+const apiURL = 'https://api-photo-list.herokuapp.com/';
 
 export {apiURL};
 
