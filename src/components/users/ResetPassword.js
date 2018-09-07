@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Alert, Button, Col, FormControl, FormGroup, Grid, ControlLabel, Row, Panel} from "react-bootstrap";
+import {Alert, Button, Col, FormControl, FormGroup, Grid, ControlLabel, Row, Panel, HelpBlock} from "react-bootstrap";
 import {apiURL} from "../../api/helpers";
 
 
@@ -11,7 +11,9 @@ class ResetPassword extends React.Component {
         this.state = {
             redirectToReferrer: false,
             email: '',
-            status: ''
+            emailErrorMessage: '',
+            nonFieldError:'',
+            success: false
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -29,24 +31,27 @@ class ResetPassword extends React.Component {
             },
             body: JSON.stringify({
                 email: this.state.email,
+
             })
 
-        }).then(function (response) {
-            return response.json()
+        }).then((response) => {
+            return response.json().then(data => { return {data: data, code:response.status} })
 
-        }).then(function (data) {
-            console.log(data)
+        }).then((data) => {
+            if (data.code === 400) {
+                this.handleFormErros(data.data)
+            } else {
+                this.setState({success: true})
+            }
+
         });
     };
-
-    getValidationState() {
-        const length = this.state.value.length;
-        if (length > 10) return 'success';
-        else if (length > 5) return 'warning';
-        else if (length > 0) return 'error';
-        return null;
+    handleFormErros(data) {
+        this.setState({
+            nonFieldError: data.non_field_errors ? data.non_field_errors.join() : '',
+            emailErrorMessage: data.email ? data.email.join() : '',
+        })
     }
-
     handleInputChange(event) {
         const target = event.target;
         const value = target.value;
@@ -58,6 +63,22 @@ class ResetPassword extends React.Component {
     }
 
     render() {
+        if (this.state.success) {
+            return (
+                <Grid>
+                    <Col xs={12} md={6} mdOffset={3}>
+                        <Panel>
+                            <Panel.Body>
+                                <h1>Reset Password</h1>
+                                <Alert bsStyle="success">
+                                    <strong>Congratulations!</strong> Password reset was successfully, check your email.
+                                </Alert>
+                            </Panel.Body>
+                        </Panel>
+                    </Col>
+                </Grid>
+            )
+        }
         return (
             <Grid>
                 <Row>
@@ -75,6 +96,10 @@ class ResetPassword extends React.Component {
                                             onChange={this.handleInputChange}
                                         />
                                         <FormControl.Feedback/>
+                                        <HelpBlock>
+                                            <p className="text-danger">{this.state.emailErrorMessage}</p>
+                                            <p className="text-danger">{this.state.nonFieldError}</p>
+                                        </HelpBlock>
                                     </FormGroup>
                                     <Button type="submit" className="btn btn-primary">Reset password</Button>
                                 </form>

@@ -39,6 +39,7 @@ class List extends React.Component {
     }
 
     renderImages() {
+        if (this.state.imageList.length > 0)
         return this.state.imageList.map((obj, index) => {
                 return (
                     <Col xs={3} key={index}>
@@ -49,6 +50,11 @@ class List extends React.Component {
                 )
             }
         );
+        return (
+                    <Col xs={12} >
+                        There's no images to show
+                    </Col>
+                )
     }
 
     render() {

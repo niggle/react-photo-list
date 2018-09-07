@@ -54,7 +54,6 @@ class Login extends Component {
     }
 
     handleFormErros(data) {
-        console.log(data)
         this.setState({
             nonFieldError: data.non_field_errors ? data.non_field_errors.join() : '',
             usernameErrorMessage: data.username ? data.username.join() : '',
