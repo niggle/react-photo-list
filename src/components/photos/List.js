@@ -1,34 +1,40 @@
 import React from 'react';
 
 import {Col, Grid, Image, Row} from "react-bootstrap";
-import {apiURL} from "../../api/helpers";
+import {apiURL, auth} from "../../api/helpers";
+import {Redirect} from "react-router-dom";
 
 class List extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageList: []
+            imageList: [],
+            redirectToLogin: false
         };
 
     }
 
     componentDidMount() {
-        console.log('Token ' + localStorage.getItem('token'))
         fetch(apiURL + 'photos/', {
             method: 'GET',
-            headers: new Headers({
+            headers: {
+                'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Token ' + localStorage.getItem('token')
-            })
-
+                'Authorization': 'JWT ' + localStorage.getItem('token')
+            },
         }).then(function (response) {
-            return response.json()
+            if (response.status === 401) {
+                auth.signout(() => this.setState({redirectToLogin: true})
+                )
+            }
+            else {
+                return response.json()
+            }
 
         }).then((data) => {
             if (data) {
                 this.setState({imageList: data})
             }
-
         });
     }
 
@@ -37,7 +43,7 @@ class List extends React.Component {
                 return (
                     <Col xs={3} key={index}>
                         <Image
-                            src={obj.photo}
+                            src={obj.thumbnail}
                             thumbnail/>
                     </Col>
                 )
@@ -46,6 +52,9 @@ class List extends React.Component {
     }
 
     render() {
+        if(this.state.redirectToLogin){
+            return <Redirect to="/user/login" />
+        }
         return (
             <div>
                 <Grid>

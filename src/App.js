@@ -43,7 +43,7 @@ class App extends Component {
                         <Route path="/user/login" component={Login}/>
                         <Route path="/user/create" component={UserCreate}/>
                         <Route path="/user/reset-password" component={ResetPassword}/>
-                        <Route path="/user/change-password/:token" component={ChangePassword}/>
+                        <Route path="/reset/:uidb64/:token" component={ChangePassword}/>
                         <PrivateRoute path="/photo/list" component={List}/>
                         <PrivateRoute path="/photo/upload" component={Create}/>
                     </div>

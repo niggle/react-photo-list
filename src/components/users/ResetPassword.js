@@ -76,10 +76,7 @@ class ResetPassword extends React.Component {
                                         />
                                         <FormControl.Feedback/>
                                     </FormGroup>
-
                                     <Button type="submit" className="btn btn-primary">Reset password</Button>
-
-
                                 </form>
                             </Panel.Body>
                         </Panel>

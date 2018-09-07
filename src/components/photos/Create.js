@@ -1,7 +1,8 @@
 import React from 'react';
 
-import {Button, Col, FormControl, FormGroup, Grid, Row, ControlLabel} from "react-bootstrap";
-import {apiURL} from "../../api/helpers";
+import {Button, Col, FormControl, FormGroup, Grid, Row, ControlLabel, Alert} from "react-bootstrap";
+import {apiURL, auth} from "../../api/helpers";
+import {Redirect} from "react-router-dom";
 
 class Create extends React.Component {
 
@@ -9,6 +10,8 @@ class Create extends React.Component {
         super(props);
         this.state = {
             image: '',
+            status: '',
+            redirectToLogin: false
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.uploadImage = this.uploadImage.bind(this)
@@ -19,15 +22,22 @@ class Create extends React.Component {
         // api upload image
         let data = new FormData();
         data.append('photo', this.state.image);
-        data.append('user', 1);
         fetch(apiURL + 'photos/create', {
             method: 'POST',
+            headers: {
+                'Authorization': 'JWT ' + localStorage.getItem('token')
+            },
             body: data
-        }).then(function (response) {
-            return response.json()
-
-        }).then(function (data) {
-            console.log(data)
+        }).then((response) => {
+            if (response.status === 401) {
+                auth.signout(() =>  this.setState({redirectToLogin: true})
+               )
+            }
+            else{
+                return response.json()
+            }
+        }).then((data) => {
+            this.setState({status:'success'})
         });
     };
 
@@ -38,6 +48,9 @@ class Create extends React.Component {
     }
 
     render() {
+        if(this.state.redirectToLogin){
+            return <Redirect to="/user/login" />
+        }
         return (
             <div>
                 <Grid>
@@ -57,6 +70,13 @@ class Create extends React.Component {
                                 <Button type="submit" className="btn btn-primary">Upload</Button>
                             </form>
                         </Col>
+                        {this.state.show  ?
+                        <Col xs={12} md={6} mdOffset={3}>
+                            <Alert bsStyle={this.state.status}>
+                                Image uploaded with success.
+                            </Alert>;
+                        </Col> :
+                        null}
                     </Row>
                 </Grid>
             </div>

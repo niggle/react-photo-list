@@ -1,4 +1,4 @@
-const apiURL = 'https://api-photo-list.herokuapp.com/';
+const apiURL = 'http://127.0.0.1:8000/';
 
 export {apiURL};
 
